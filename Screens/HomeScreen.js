@@ -1,12 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, SafeAreaView, StyleSheet } from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const HomeScreen = () => {
+  const [user, setUser] = useState("");
+  
+  useEffect(() => {
+    retrieveUser();
+  }, []);
+
+  const retrieveUser = async () => {
+    try {
+      const username = await AsyncStorage.getItem("username");
+      if (username !== null) {
+        setUser(username);
+      }
+    } catch (error) {
+      console.error("Error retrieving current user:", error);
+    } 
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>Welcome to Home Screen</Text>
-        <Text style={styles.subtitle}>This is a basic home screen component.</Text>
+        <Text style={styles.title}>Hello {user}</Text>
+        <Text style={styles.subtitle}>These are your project tasks</Text>
       </View>
     </SafeAreaView>
   );
@@ -15,12 +33,14 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF', // Change background color as per your color profile
+    backgroundColor: '#A5A294', 
   },
   content: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'top',
+    marginTop: '5%' ,
+    marginLeft: '5%',
+    alignItems: 'left'
   },
   title: {
     fontSize: 24,
@@ -29,7 +49,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 18,
-    color: '#666666', // Change text color as per your color profile
+    color: '#666666', 
   },
 });
 

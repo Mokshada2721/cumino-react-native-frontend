@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, SafeAreaView, Pressable, ImageBackground, StyleSheet } from 'react-native';
+import { View, Text, SafeAreaView, Pressable, ImageBackground, StyleSheet, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native'; 
 
@@ -35,6 +35,8 @@ const FirstScreen = () => {
   );
 };
 
+const windowWidth = Dimensions.get('window').width;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -45,36 +47,36 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   content: {
-    paddingHorizontal: 20,
+    paddingHorizontal: windowWidth * 0.1,
     alignItems: 'center',
   },
   largeText: {
     fontWeight: 'bold',
-    fontSize: 26,
-    lineHeight: 32,
+    fontSize: windowWidth * 0.09, 
+    lineHeight: windowWidth * 0.09, 
     color: '#000000',
-    marginBottom: 15,
+    marginBottom: windowWidth * 0.03, 
     textAlign: 'center',
   },
   smallText: {
-    fontSize: 16,
+    fontSize: windowWidth * 0.04, 
     color: '#000000',
     fontWeight: '500',
-    marginBottom: 30,
+    marginBottom: windowWidth * 0.07, 
     textAlign: 'center',
   },
   button: {
     backgroundColor: '#29222E',
-    borderRadius: 7,
-    height: 45,
+    borderRadius: windowWidth * 0.05, 
+    height: windowWidth * 0.12, 
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: windowWidth * 0.03, 
   },
   buttonText: {
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: windowWidth * 0.05, 
     color: '#FFFFFF',
   },
 });
