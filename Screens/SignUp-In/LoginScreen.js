@@ -3,7 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet, Alert, ImageBackground, Dime
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const API_URL = 'http://10.24.71.85:5000/api';
+const API_URL = 'http://192.168.180.166:5000/api';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = React.useState('');

@@ -3,7 +3,7 @@ import { View, Text, SafeAreaView, StyleSheet } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios'; 
 
-const BASE_URL = 'http://10.24.71.85:5000/api'; 
+const BASE_URL = 'http://192.168.180.166:5000/api'; 
 
 const HomeScreen = () => {
   const [email, setEmail] = useState("");

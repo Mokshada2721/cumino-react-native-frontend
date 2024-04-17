@@ -4,7 +4,7 @@ import database from "../../utils/Sqlite";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage"; 
 
-const BASE_URL = "http://10.24.71.85:5000/api"; 
+const BASE_URL = "http://192.168.180.166:5000/api"; 
 
 const TodoScreen = ({ navigation }) => {
     const [task, setTask] = useState("");
