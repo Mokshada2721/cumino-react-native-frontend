@@ -8,7 +8,7 @@ const database = {
     initDatabase: () => { 
         db.transaction((tx) => {
             tx.executeSql(
-                "CREATE TABLE IF NOT EXISTS tasks (ID INTEGER PRIMARY KEY AUTOINCREMENT, mongoId TEXT, task TEXT, status TEXT, synced INTEGER);"
+                "CREATE TABLE IF NOT EXISTS tasks (ID INTEGER PRIMARY KEY AUTOINCREMENT, task TEXT, status TEXT, synced INTEGER);"
             );
         });
     }

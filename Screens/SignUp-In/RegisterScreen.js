@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, ImageBackground, Dimensions, Pressable } from 'react-native';
 import axios from 'axios';
 
-const API_URL = 'http://192.168.180.166:5000/api';
+const API_URL = 'http://10.24.71.85:5000/api';
 
 const RegisterScreen = ({ navigation }) => {
   const [username, setUsername] = React.useState('');

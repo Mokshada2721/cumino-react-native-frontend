@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Alert, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import database from "../../utils/Sqlite"; 
-import axios from "axios"; 
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage"; 
 
-const BASE_URL = "http://192.168.180.166:5000/api"; 
+const BASE_URL = "http://10.24.71.85:5000/api"; 
 
 const TodoScreen = ({ navigation }) => {
     const [task, setTask] = useState("");
@@ -13,14 +14,14 @@ const TodoScreen = ({ navigation }) => {
         database.initDatabase(); 
     }, []);
 
-    function saveTaskHandle() {
+    function saveTaskHandler() {
         if (task.length === 0) {
             Alert.alert("Error", "Please enter a task", [{ text: "Okay" }]);
         } else {
             const mongoId = ''; 
             database.db.transaction((tx) => {
                 tx.executeSql(
-                    "INSERT INTO tasks (task, status, mongoId, synced) VALUES (?, ?, ?, ?)",
+                    "INSERT INTO tasks (task, status, synced) VALUES (?, ?, ?)",
                     [task, status, mongoId, 0],
                     (tx, results) => {
                         if (results.rowsAffected > 0) {
@@ -56,49 +57,59 @@ const TodoScreen = ({ navigation }) => {
 
   const retrieveUser = async () => {
     try {
-      const username = await AsyncStorage.getItem("username");
-      if (username !== null) {
-        setUser(username);
+      const user = await AsyncStorage.getItem("username");
+      if (user !== null) {
+        setUser(user);
       }
     } catch (error) {
       console.error("Error retrieving current user:", error);
     } 
   };
 
-  async function syncDataWithMongo(user) {
-      database.db.transaction((tx) => {
-          tx.executeSql(
-              "SELECT * FROM tasks WHERE synced = 0",
-              [],
-              async (tx, results) => {
-                  const len = results.rows.length;
-                  const tasks = [];
-                  for (let i = 0; i < len; i++) {
-                      const task = results.rows.item(i);
-                      tasks.push(task);
-                  }
-                  try {
-                      const response = await axios.put(`${BASE_URL}/todos/sync`, tasks);
-                      console.log('Synced with MongoDB:', response.data);
+  async function syncDataWithMongo() {
+    try {
+        const username = user; 
+        const tasks = await new Promise((resolve, reject) => {
+            database.db.transaction((tx) => {
+                tx.executeSql(
+                    "SELECT * FROM tasks WHERE synced = 0",
+                    [],
+                    (tx, results) => {
+                        const len = results.rows.length;
+                        const tasks = [];
+                        for (let i = 0; i < len; i++) {
+                            const task = results.rows.item(i);
+                            tasks.push(task);
+                        }
+                        resolve(tasks);
+                    },
+                    (error) => {
+                        console.error("Error fetching tasks from SQLite:", error);
+                        reject(error);
+                    }
+                );
+            });
+        });
 
-                      database.db.transaction((tx) => {
-                          tasks.forEach((task) => {
-                              tx.executeSql(
-                                  "UPDATE tasks SET synced = 1 WHERE ID = ?",
-                                  [task.ID]
-                              );
-                          });
-                      });
-                    } catch (error) {
-                      console.error('Error syncing with MongoDB:', error);
-                  }
-              },
-              (error) => {
-                  console.error("Error fetching tasks from SQLite:", error);
-              }
-          );
-      });
-  }
+        // Add task ID from SQLite to each task
+        const tasksWithId = tasks.map(task => ({ ...task, sqliteId: task.ID }));
+
+        const response = await axios.put(`${BASE_URL}/todo/sync`, { username, tasks: tasksWithId });
+        console.log('Synced with MongoDB:', response.data);
+
+        // Mark tasks as synced in SQLite after successful sync with MongoDB
+        database.db.transaction((tx) => {
+            tasks.forEach((task) => {
+                tx.executeSql(
+                    "UPDATE tasks SET synced = 1 WHERE ID = ?",
+                    [task.ID]
+                );
+            });
+        });
+    } catch (error) {
+        console.error('Error syncing with MongoDB:', error);
+    }
+}
 
   return (
       <View style={styles.container}>

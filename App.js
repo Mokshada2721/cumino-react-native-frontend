@@ -7,7 +7,6 @@ import FirstScreen from './Screens/FirstScreen';
 import RegisterScreen from './Screens/SignUp-In/RegisterScreen';
 import LoginScreen from './Screens/SignUp-In/LoginScreen';
 import HomeScreen from './Screens/HomeScreen';
-import ChatScreen from './Screens/ChatFeature/ChatScreen';
 import SideBar from './Components/SideBar';
 import TodoScreen from './Screens/Todo/TodoScreen';
 import List from './Screens/Todo/List';
@@ -28,13 +27,13 @@ const App = () => {
           headerTintColor: 'white',
           headerTitleStyle: styles.title,
         }} />
-        <Drawer.Screen name="Chat" component={ChatScreen} 
+        {/* <Drawer.Screen name="Chat" component={ChatScreen} 
         options={{
           headerTitle: 'Chat',
           headerStyle: styles.header,
           headerTintColor: 'white',
           headerTitleStyle: styles.title,
-        }}/>
+        }}/> */}
         <Drawer.Screen name="Personal Goals" component={TodoScreen} 
         options={{
           headerTitle: 'Personal Goals',

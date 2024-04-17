@@ -3,7 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet, Alert, ImageBackground, Dime
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const API_URL = 'http://192.168.180.166:5000/api';
+const API_URL = 'http://10.24.71.85:5000/api';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = React.useState('');
@@ -16,7 +16,8 @@ const LoginScreen = ({ navigation }) => {
         navigation.navigate('Home');
         console.log("Login successful");
         console.log("Username:", response.data.username);
-        storeUsername(response.data.username, response.data._id);
+        console.log("Email: ", response.data.useremail);
+        storeUsername(response.data.username, response.data.useremail);
       } else {
         Alert.alert('Login Failed', 'Invalid email or password');
       }
@@ -26,9 +27,10 @@ const LoginScreen = ({ navigation }) => {
     }
   };  
   
-  const storeUsername = async (username) => {
+  const storeUsername = async (username, useremail) => {
     try {
       await AsyncStorage.setItem("username", username);
+      await AsyncStorage.setItem("useremail", useremail);
     } catch (error) {
       console.error('Error storing username:', error);
       Alert.alert('Error', 'An error occurred while saving username');

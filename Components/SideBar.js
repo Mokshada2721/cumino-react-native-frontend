@@ -27,11 +27,11 @@ const SideBar = (props) => {
             onPress={() => props.navigation.navigate('Personal Goals')}
             labelStyle={styles.label}
           />
-          <DrawerItem
+          {/* <DrawerItem
             label="Chat"
             onPress={() => props.navigation.navigate('Chat')}
             labelStyle={styles.label} 
-          />
+          /> */}
         </View>
         <Pressable style={styles.logoutButton}>
           <Text style={styles.logoutText}>Logout</Text>
